@@ -7,7 +7,7 @@ from __future__ import annotations
 import os
 import time
 
-from cubesandbox import Config, Sandbox, Template
+from cubesandbox import NEVER_TIMEOUT, Config, Sandbox, Template
 
 API_URL = os.environ.get(
     "CUBE_API_URL", "http://cubesandbox-api.cube-system.svc.cluster.local:3000"
@@ -64,14 +64,15 @@ def main() -> None:
             raise SystemExit(f"build failed: {st.error_message or st.message}")
         time.sleep(5)
 
-    print(f"[3] Sandbox.create template={tid}")
-    sb = Sandbox.create(template=tid, timeout=300, config=cfg)
+    print(f"[3] Sandbox.create template={tid} timeout=NEVER")
+    # NEVER_TIMEOUT=-1: 不按空闲回收, 便于交互复用; 不用完需手动 kill
+    sb = Sandbox.create(template=tid, timeout=NEVER_TIMEOUT, config=cfg)
     print(f"    sandbox_id={sb.sandbox_id}")
     r = sb.commands.run("python3 -c 'print(\"hello from demo-envd\")' && uname -m")
     print(f"[4] exit={r.exit_code}\n{r.stdout}\n{r.stderr}")
     if r.exit_code != 0:
         raise SystemExit("command failed")
-    print("[ok] demo passed (sandbox kept alive, not killed)")
+    print("[ok] demo passed (sandbox kept alive, never timeout)")
     print(f"    reuse: sandbox_id={sb.sandbox_id}")
 
 
