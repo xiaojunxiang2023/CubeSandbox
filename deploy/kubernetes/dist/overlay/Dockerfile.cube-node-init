@@ -1,0 +1,16 @@
+# 基于社区 cube-node-init 叠 kdxe cubebox_os_image 软链脚本, 不重新编译.
+# 构建:
+#   docker build --network host \
+#     --build-arg BASE_IMAGE=cube-sandbox-int.tencentcloudcr.com/cube-sandbox/cube-node-init:v0.7.0 \
+#     -f deploy/kubernetes/dist/overlay/Dockerfile.cube-node-init \
+#     -t ezone.ksyun.com/ezone/kdxe_docker/snapshot/kdxe/cube-node-init:v0.7.0 \
+#     deploy/kubernetes/images/scripts
+
+ARG BASE_IMAGE=cube-sandbox-int.tencentcloudcr.com/cube-sandbox/cube-node-init:v0.7.0
+FROM ${BASE_IMAGE}
+
+COPY cubebox_os_image.sh /scripts/cubebox_os_image.sh
+COPY cube-node-init.sh /scripts/cube-node-init.sh
+
+RUN chmod 644 /scripts/cubebox_os_image.sh \
+ && chmod +x /scripts/cube-node-init.sh

@@ -350,6 +350,7 @@ if [ "$CREATE_HOST_DIRS" = "true" ]; then
   log "creating host directories"
   mkdir -p \
     "$(host_path /data/cubelet)" \
+    "$(host_path /data/cubebox_os_image)" \
     "$(host_path /data/log)" \
     "$(host_path /data/cube-shim)" \
     "$(host_path /data/snapshot_pack)" \
@@ -357,6 +358,24 @@ if [ "$CREATE_HOST_DIRS" = "true" ]; then
     "$(host_path /data/cube-shared/volume)" \
     "$(host_path /data/shared)" \
     "$(host_path /tmp/cube)"
+  host_mount_sh 'mkdir -p /data/cubebox_os_image /usr/local/services/cubetoolbox
+if [ -L /usr/local/services/cubetoolbox/cubebox_os_image ]; then
+  cur=$(readlink /usr/local/services/cubetoolbox/cubebox_os_image)
+  if [ "$cur" = /data/cubebox_os_image ]; then
+    exit 0
+  fi
+  rm -f /usr/local/services/cubetoolbox/cubebox_os_image
+elif [ -d /usr/local/services/cubetoolbox/cubebox_os_image ]; then
+  if [ ! -d /data/cubebox_os_image ]; then
+    mv /usr/local/services/cubetoolbox/cubebox_os_image /data/cubebox_os_image
+  else
+    cp -a /usr/local/services/cubetoolbox/cubebox_os_image/. /data/cubebox_os_image/ 2>/dev/null || true
+    rm -rf /usr/local/services/cubetoolbox/cubebox_os_image
+  fi
+fi
+mkdir -p /data/cubebox_os_image
+ln -sfn /data/cubebox_os_image /usr/local/services/cubetoolbox/cubebox_os_image'
+  log "cubebox_os_image softlink ready on host"
 fi
 
 if ! xfs_info "$DATA_CUBELET" >/dev/null 2>&1; then

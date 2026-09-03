@@ -1006,6 +1006,9 @@ hostPaths:
   sys: /sys
   libModules: /lib/modules
   dataCubelet: /data/cubelet
+  # Template rootfs artifacts (cubebox_os_image). Softlinked from toolbox:
+  # /usr/local/services/cubetoolbox/cubebox_os_image -> /data/cubebox_os_image
+  dataCubeboxOsImage: /data/cubebox_os_image
   dataLog: /data/log
   dataCubeShim: /data/cube-shim
   dataSnapshotPack: /data/snapshot_pack
@@ -1024,7 +1027,8 @@ hostPaths:
   # /usr/local/services/cubetoolbox. Installer
   # and Big Pod self-stage copy from /opt/cube-image into this tree; preserve
   # dirs such as cube-snapshot / cubebox_os_image / cubeletmnt / cube-vs are not
-  # wiped by component installs.
+  # wiped by component installs. cubebox_os_image is a softlink to
+  # hostPaths.dataCubeboxOsImage (data disk), matching one-click.
   toolbox: /usr/local/services/cubetoolbox
   # Shim ttrpc listen sockets: containerd-shim SOCKET_ROOT is hardcoded to
   # /run/containerd, and LoadExistingShims dials unix:///run/containerd/s/{hash}

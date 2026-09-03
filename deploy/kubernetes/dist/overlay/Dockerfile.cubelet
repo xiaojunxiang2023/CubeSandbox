@@ -1,0 +1,17 @@
+# 基于社区 cubelet 叠 kdxe cubebox_os_image 软链脚本, 不重新编译二进制.
+# 构建:
+#   docker build --network host \
+#     --build-arg BASE_IMAGE=cube-sandbox-int.tencentcloudcr.com/cube-sandbox/cubelet:v0.7.0 \
+#     -f deploy/kubernetes/dist/overlay/Dockerfile.cubelet \
+#     -t ezone.ksyun.com/ezone/kdxe_docker/snapshot/kdxe/cubelet:v0.7.0 \
+#     deploy/kubernetes/images/scripts
+
+ARG BASE_IMAGE=cube-sandbox-int.tencentcloudcr.com/cube-sandbox/cubelet:v0.7.0
+FROM ${BASE_IMAGE}
+
+COPY cubebox_os_image.sh /usr/local/bin/cubebox_os_image.sh
+COPY component-entrypoint.sh /usr/local/bin/component-entrypoint.sh
+
+RUN chmod 644 /usr/local/bin/cubebox_os_image.sh \
+ && chmod +x /usr/local/bin/component-entrypoint.sh \
+ && mkdir -p /data/cubebox_os_image

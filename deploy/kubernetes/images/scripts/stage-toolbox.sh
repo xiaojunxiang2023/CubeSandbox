@@ -90,3 +90,13 @@ do
 done
 
 log "toolbox staged successfully at ${HOST_TOOLBOX_ROOT}"
+
+if [[ -f "$(dirname "${BASH_SOURCE[0]}")/cubebox_os_image.sh" ]]; then
+  # shellcheck disable=SC1091
+  . "$(dirname "${BASH_SOURCE[0]}")/cubebox_os_image.sh"
+  ensure_cubebox_os_image_on_data "${HOST_TOOLBOX_ROOT}"
+elif [[ -f /usr/local/bin/cubebox_os_image.sh ]]; then
+  # shellcheck disable=SC1091
+  . /usr/local/bin/cubebox_os_image.sh
+  ensure_cubebox_os_image_on_data "${HOST_TOOLBOX_ROOT}"
+fi

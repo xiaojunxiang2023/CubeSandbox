@@ -900,6 +900,9 @@ Toolbox is mounted whole at the fixed path.
 - name: data-cubelet
   mountPath: {{ .Values.hostPaths.dataCubelet }}
   mountPropagation: Bidirectional
+- name: data-cubebox-os-image
+  mountPath: {{ .Values.hostPaths.dataCubeboxOsImage }}
+  mountPropagation: Bidirectional
 - name: data-log
   mountPath: {{ .Values.hostPaths.dataLog }}
 - name: data-cube-shim
@@ -1000,6 +1003,9 @@ Bootstrap: host mutation mounts for pvm / node-init.
 - name: data-cubelet
   mountPath: {{ .Values.hostPaths.dataCubelet }}
   mountPropagation: Bidirectional
+- name: data-cubebox-os-image
+  mountPath: {{ .Values.hostPaths.dataCubeboxOsImage }}
+  mountPropagation: Bidirectional
 - name: data-log
   mountPath: {{ .Values.hostPaths.dataLog }}
 - name: data-cube-shim
@@ -1038,6 +1044,10 @@ Bootstrap: host mutation mounts for pvm / node-init.
 - name: data-cubelet
   hostPath:
     path: {{ .Values.hostPaths.dataCubelet }}
+    type: DirectoryOrCreate
+- name: data-cubebox-os-image
+  hostPath:
+    path: {{ .Values.hostPaths.dataCubeboxOsImage }}
     type: DirectoryOrCreate
 - name: data-log
   hostPath:

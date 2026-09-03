@@ -302,6 +302,10 @@ spec:
           hostPath:
             path: {{ .Values.hostPaths.dataCubelet }}
             type: DirectoryOrCreate
+        - name: data-cubebox-os-image
+          hostPath:
+            path: {{ .Values.hostPaths.dataCubeboxOsImage }}
+            type: DirectoryOrCreate
         - name: data-log
           hostPath:
             path: {{ .Values.hostPaths.dataLog }}
