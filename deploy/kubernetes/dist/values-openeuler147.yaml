@@ -1,0 +1,145 @@
+# openeuler147 — offline ezone only
+# Community images mirrored to ezone (v0.7.0); kdxe-built images for components
+# with local changes (cubebox_os_image softlink on node-init / cubelet).
+
+webui:
+  enabled: false
+cubeOps:
+  enabled: true
+cubeEgress:
+  enabled: false
+helmTest:
+  enabled: false
+diagnostics:
+  enabled: false
+
+minio:
+  enabled: false
+
+bootstrap:
+  pvmHostKernel:
+    enabled: false
+  nodeInit:
+    dataCubelet:
+      loopback:
+        enabled: false
+
+cubeNode:
+  enabled: true
+  pvmGuestKernel:
+    enabled: false
+
+controlPlane:
+  enabled: true
+  api:
+    enabled: true
+    sandboxDomain: "cube.app"
+  master:
+    enabled: true
+    persistence:
+      enabled: true
+
+cubemastercli:
+  enabled: true
+
+lifecycleManager:
+  enabled: true
+
+cubeProxy:
+  enabled: true
+  advertiseIP: "10.148.51.147"
+  domain: "cube.app"
+  tls:
+    mode: selfSigned
+  service:
+    type: NodePort
+    nodePorts:
+      http: 30082
+  ingress:
+    enabled: false
+  configureClusterDNS: true
+
+database:
+  driver: postgres
+postgres:
+  host: "10.69.66.75"
+  port: 8431
+  user: kingsoft
+  password: '4x9Z#k6!d1C2^E3'
+  database: cube_mvp
+
+redis:
+  enabled: true
+  host: ""
+  masterName: sentinel-master
+  sentinelNodes: "10.148.51.25:26379,10.148.51.26:26379,10.148.51.27:26379"
+  password: "Kingsoft_com123!"
+  sentinelPassword: ""
+
+images:
+  # kdxe-built (cubebox_os_image softlink on data disk)
+  nodeInit:
+    repository: ezone.ksyun.com/ezone/kdxe_docker/snapshot/kdxe/cube-node-init
+    tag: v0.7.0
+    pullPolicy: Always
+  cubelet:
+    repository: ezone.ksyun.com/ezone/kdxe_docker/snapshot/kdxe/cubelet
+    tag: v0.7.0
+    pullPolicy: Always
+  # Community images mirrored to ezone
+  waitNodePrep:
+    repository: ezone.ksyun.com/ezone/kdxe_docker/snapshot/kdxe/cube-wait-node-prep
+    tag: v0.7.0
+    pullPolicy: Always
+  cubeShim:
+    repository: ezone.ksyun.com/ezone/kdxe_docker/snapshot/kdxe/cube-shim
+    tag: v0.7.0
+    pullPolicy: Always
+  cubeKernel:
+    repository: ezone.ksyun.com/ezone/kdxe_docker/snapshot/kdxe/cube-kernel
+    tag: v0.7.0
+    pullPolicy: Always
+  cubeGuest:
+    repository: ezone.ksyun.com/ezone/kdxe_docker/snapshot/kdxe/cube-guest
+    tag: v0.7.0
+    pullPolicy: Always
+  cubeAgent:
+    repository: ezone.ksyun.com/ezone/kdxe_docker/snapshot/kdxe/cube-agent
+    tag: v0.7.0
+    pullPolicy: Always
+  master:
+    repository: ezone.ksyun.com/ezone/kdxe_docker/snapshot/kdxe/cube-master
+    tag: v0.7.0
+    pullPolicy: Always
+  api:
+    repository: ezone.ksyun.com/ezone/kdxe_docker/snapshot/kdxe/cube-api
+    tag: v0.7.0
+    pullPolicy: Always
+  ops:
+    repository: ezone.ksyun.com/ezone/kdxe_docker/snapshot/kdxe/cube-ops
+    tag: v0.7.0
+    pullPolicy: Always
+  proxy:
+    repository: ezone.ksyun.com/ezone/kdxe_docker/snapshot/kdxe/cube-proxy
+    tag: v0.7.0
+    pullPolicy: Always
+  lifecycleManager:
+    repository: ezone.ksyun.com/ezone/kdxe_docker/snapshot/kdxe/cube-lifecycle-manager
+    tag: v0.7.0
+    pullPolicy: Always
+  cubemastercli:
+    repository: ezone.ksyun.com/ezone/kdxe_docker/snapshot/kdxe/cubemastercli
+    tag: v0.7.0
+    pullPolicy: Always
+  kubectl:
+    repository: ezone.ksyun.com/ezone/kdxe_docker/snapshot/kdxe/alpine-k8s
+    tag: "1.28.15"
+    pullPolicy: Always
+
+placement:
+  controlPlane:
+    nodeSelector:
+      cube.tencent.com/cube-control: "true"
+  compute:
+    nodeSelector:
+      cube.tencent.com/cube-node: "true"
