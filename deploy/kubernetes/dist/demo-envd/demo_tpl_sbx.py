@@ -66,16 +66,13 @@ def main() -> None:
 
     print(f"[3] Sandbox.create template={tid}")
     sb = Sandbox.create(template=tid, timeout=300, config=cfg)
-    try:
-        print(f"    sandbox_id={sb.sandbox_id}")
-        r = sb.commands.run("python3 -c 'print(\"hello from demo-envd\")' && uname -m")
-        print(f"[4] exit={r.exit_code}\n{r.stdout}\n{r.stderr}")
-        if r.exit_code != 0:
-            raise SystemExit("command failed")
-        print("[ok] demo passed")
-    finally:
-        print("[5] kill sandbox")
-        sb.kill()
+    print(f"    sandbox_id={sb.sandbox_id}")
+    r = sb.commands.run("python3 -c 'print(\"hello from demo-envd\")' && uname -m")
+    print(f"[4] exit={r.exit_code}\n{r.stdout}\n{r.stderr}")
+    if r.exit_code != 0:
+        raise SystemExit("command failed")
+    print("[ok] demo passed (sandbox kept alive, not killed)")
+    print(f"    reuse: sandbox_id={sb.sandbox_id}")
 
 
 if __name__ == "__main__":
