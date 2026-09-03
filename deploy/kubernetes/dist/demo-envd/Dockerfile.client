@@ -1,0 +1,11 @@
+# CubeSandbox 客户端: 本机 docker run --network host 跑模板/实例 demo
+# base = python enhance; 装 cubesandbox SDK + 极简脚本
+
+FROM ezone.ksyun.com/ezone/kdxe_docker/snapshot/kdxe-multi/python:3.12-enhance
+
+RUN pip3 install --no-cache-dir cubesandbox==0.7.0
+
+COPY demo_tpl_sbx.py /opt/demo_tpl_sbx.py
+
+WORKDIR /opt
+ENTRYPOINT ["python3", "/opt/demo_tpl_sbx.py"]

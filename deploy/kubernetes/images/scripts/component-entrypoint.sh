@@ -849,11 +849,15 @@ run_cubelet() {
 
   kill_pidfile cubelet
 
-  log "starting cubelet node_id=${CUBE_SANDBOX_NODE_ID:-} endpoint=${CUBE_SANDBOX_ENDPOINT_IP}"
+  # 大机 (多 NUMA × 默认 cgroup pool) 冷启动常 >60s 才监听 9999; 默认 300s, 可用环境变量覆盖
+  local ready_timeout="${CUBELET_READY_TIMEOUT_SECONDS:-300}"
+  [[ "${ready_timeout}" =~ ^[1-9][0-9]*$ ]] || fail "CUBELET_READY_TIMEOUT_SECONDS must be a positive integer"
+
+  log "starting cubelet node_id=${CUBE_SANDBOX_NODE_ID:-} endpoint=${CUBE_SANDBOX_ENDPOINT_IP} ready_timeout=${ready_timeout}s"
   "${bin}" --config "${cfg}" --dynamic-conf-path "${dyn}" &
   launch=$!
 
-  for i in $(seq 1 60); do
+  for i in $(seq 1 "${ready_timeout}"); do
     pid="$(pidof cubelet 2>/dev/null | awk '{print $1}' || true)"
     if [[ -n "${pid}" ]] && kill -0 "${pid}" >/dev/null 2>&1 && ss -lntp 2>/dev/null | grep -q ':9999'; then
       write_pidfile cubelet "${pid}"
@@ -863,7 +867,7 @@ run_cubelet() {
     if ! kill -0 "${launch}" >/dev/null 2>&1 && [[ -z "${pid}" ]]; then
       fail "cubelet exited before listening on 9999"
     fi
-    [[ "${i}" -lt 60 ]] || fail "cubelet did not become ready"
+    [[ "${i}" -lt "${ready_timeout}" ]] || fail "cubelet did not become ready within ${ready_timeout}s"
     sleep 1
   done
 

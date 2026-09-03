@@ -19,8 +19,10 @@ helm package deploy/kubernetes/chart -d deploy/kubernetes/dist
 
 | Type | Images | How |
 |------|--------|-----|
-| Mirror | master, api, ops, cubemastercli, proxy, lifecycle-manager, shim, kernel, guest, agent, wait-node-prep, alpine-k8s | pull 社区 → tag ezone (不编译) |
-| Overlay (kdxe) | node-init, cubelet | 社区 `v0.7.0` 为 base, 只叠 cubebox_os_image 软链脚本 |
+| Mirror | master, api, ops, cubemastercli, proxy, lifecycle-manager, shim, kernel, guest, agent, wait-node-prep, alpine-k8s | skopeo `--all` 拷社区 multi-arch (amd64+arm64) |
+| Overlay (kdxe) | node-init, cubelet | 社区双架构 base 上按 arch 叠软链脚本, 再合 manifest |
+
+社区 `v0.7.0` / `alpine-k8s:1.28.15` 已提供 **linux/amd64 + linux/arm64**. ezone 上同 tag 为 multi-arch index.
 
 在 ubuntu22 上推 ezone:
 

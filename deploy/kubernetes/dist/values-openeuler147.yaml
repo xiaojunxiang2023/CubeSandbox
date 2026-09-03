@@ -28,6 +28,15 @@ cubeNode:
   enabled: true
   pvmGuestKernel:
     enabled: false
+  # 多 NUMA 大机: 缩短 cgroup 预建规模 + 与 entrypoint 就绪等待对齐
+  env:
+    - name: CUBE_CGROUP_POOL_SIZE
+      value: "200"
+    - name: CUBELET_READY_TIMEOUT_SECONDS
+      value: "300"
+  probes:
+    startup:
+      failureThreshold: 60
 
 controlPlane:
   enabled: true
