@@ -84,6 +84,8 @@ redis:
   sentinelNodes: "10.148.51.25:26379,10.148.51.26:26379,10.148.51.27:26379"
   password: "Kingsoft_com123!"
   sentinelPassword: ""
+  # 与其他 Cube 集群共用 Sentinel 时改 DB 号隔离
+  db: 1
 
 images:
   # kdxe-built (cubebox_os_image softlink on data disk)

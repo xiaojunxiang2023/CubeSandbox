@@ -12,8 +12,11 @@ from cubesandbox import Config, Sandbox, Template
 API_URL = os.environ.get(
     "CUBE_API_URL", "http://cubesandbox-api.cube-system.svc.cluster.local:3000"
 )
-PROXY_IP = os.environ.get("CUBE_PROXY_NODE_IP", "10.148.51.147")
-PROXY_PORT = int(os.environ.get("CUBE_PROXY_PORT_HTTP", "30082"))
+# 集群内默认走 Proxy Service; 集群外再设 CUBE_PROXY_NODE_IP / CUBE_PROXY_PORT_HTTP
+PROXY_IP = os.environ.get(
+    "CUBE_PROXY_NODE_IP", "cubesandbox-proxy.cube-system.svc.cluster.local"
+)
+PROXY_PORT = int(os.environ.get("CUBE_PROXY_PORT_HTTP", "80"))
 DOMAIN = os.environ.get("CUBE_SANDBOX_DOMAIN", "cube.app")
 IMAGE = os.environ.get(
     "DEMO_IMAGE", "ezone.ksyun.com/ezone/kdxe_docker/snapshot/kdxe/demo-envd:1.0"
